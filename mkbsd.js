@@ -6,6 +6,9 @@ const path = require(`path`);
 
 async function main() {
 	const url = 'https://storage.googleapis.com/panels-api/data/20240916/media-1a-i-p~s';
+	const delay = (ms) => {
+		return new Promise(resolve => setTimeout(resolve, ms));
+	}
 	try {
 		const response = await fetch(url);
 		if (!response.ok) {
@@ -22,9 +25,6 @@ async function main() {
 			console.info(`📁 Created directory: ${downloadDir}`);
 		}
 		let fileIndex = 1;
-		function delay(ms) {
-			return new Promise(resolve => setTimeout(resolve, ms));
-		}
 		for (const key in data) {
 			const subproperty = data[key];
 			if (subproperty && subproperty.dhd) {
@@ -52,7 +52,6 @@ async function downloadImage(url, filePath) {
 	}
 	const arrayBuffer = await response.arrayBuffer();
 	const buffer = Buffer.from(arrayBuffer);
-
 	await fs.promises.writeFile(filePath, buffer);
 }
 
