@@ -1,4 +1,4 @@
-// Licensed under the WTFPL License
+# Licensed under the WTFPL License
 
 import os
 import time
