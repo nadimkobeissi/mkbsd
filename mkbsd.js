@@ -6,9 +6,6 @@ const path = require(`path`);
 
 async function main() {
 	const url = 'https://storage.googleapis.com/panels-api/data/20240916/media-1a-i-p~s';
-	const delay = (ms) => {
-		return new Promise(resolve => setTimeout(resolve, ms));
-	}
 	try {
 		const response = await fetch(url);
 		if (!response.ok) {
@@ -25,20 +22,28 @@ async function main() {
 			console.info(`📁 Created directory: ${downloadDir}`);
 		}
 		let fileIndex = 1;
+		const promises = [];
 		for (const key in data) {
 			const subproperty = data[key];
 			if (subproperty && subproperty.dhd) {
 				const imageUrl = subproperty.dhd;
-				console.info(`🔍 Found image URL!`);
-				await delay(100);
 				const ext = path.extname(new URL(imageUrl).pathname) || '.jpg';
 				const filename = `${fileIndex}${ext}`;
 				const filePath = path.join(downloadDir, filename);
-				await downloadImage(imageUrl, filePath);
-				console.info(`🖼️ Saved image to ${filePath}`);
+				promises.push(downloadImage(imageUrl, filePath));
 				fileIndex++;
-				await delay(250);
 			}
+		}
+		console.info(`📥 Downloading ${promises.length} images...`);
+		const startTime = Date.now();
+		const results = await Promise.allSettled(promises);
+		const endTime = Date.now();
+		const duration = (endTime - startTime) / 1000;
+		const successCount = results.filter((result) => result.status === 'fulfilled').length;
+		const failureCount = results.length - successCount;
+		console.info(`✅ Downloaded ${successCount} images in ${duration} seconds.`);
+		if (failureCount > 0) {
+			console.warn(`❌ Failed to download ${failureCount} images.`);
 		}
 	} catch (error) {
 		console.error(`Error: ${error.message}`);
@@ -52,7 +57,8 @@ async function downloadImage(url, filePath) {
 	}
 	const arrayBuffer = await response.arrayBuffer();
 	const buffer = Buffer.from(arrayBuffer);
-	await fs.promises.writeFile(filePath, buffer);
+	console.info(`📄 Downloaded image: ${filePath}`);
+	return fs.promises.writeFile(filePath, buffer);
 }
 
 function asciiArt() {
@@ -71,5 +77,5 @@ function asciiArt() {
 
 (() => {
 	asciiArt();
-	setTimeout(main, 5000);
+	setTimeout(main, 1000);
 })();
