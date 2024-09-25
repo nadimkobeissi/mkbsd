@@ -1,0 +1,12 @@
+{
+  "name": "mkbsd-runner",
+  "version": "1.0.0",
+  "description": "Runner for mkbsd script with path option",
+  "main": "run.js",
+  "bin": {
+    "mkbsd-runner": "./run.js"
+  },
+  "dependencies": {
+    "yargs": "^17.7.2"
+  }
+}
