@@ -1,0 +1,12 @@
+[package]
+name = "MKBSD"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+reqwest = { version = "0.12.7", features = ["json", "blocking"] }
+tokio = { version = "1.40", features = ["full"] }
+url = "2.5.2"
+serde = { version = "1.0.210", features = ["derive"] }
+serde_json = "1.0.128"
+futures = "0.3.30"
