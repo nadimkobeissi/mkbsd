@@ -37,7 +37,7 @@ MKBSD comes in two variants! Node.js and Python.
 On September 24th, 2024, well-known tech YouTuber MKBHD released Panels, a wallpaper app that:
 
 - Had insanely invasive, unjustified tracking including for location history and search history.
-- Charged artist a predatory 50% commission (even Apple takes only 30% for app purchases).
+- Charged artists a predatory 50% commission (even Apple takes only 30% for app purchases).
 - Forced you to watch two ads for every wallpaper that you wanted to download, and then only letting you download it in SD.
 - Gatekept all HD wallpapers behind a **fifty dollars a year subscription**.
 - Had many wallpapers that were essentially AI-generated slop or badly edited stock photos.
