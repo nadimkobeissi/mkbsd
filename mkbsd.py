@@ -5,10 +5,13 @@ import time
 import aiohttp
 import asyncio
 from urllib.parse import urlparse
+
 url = 'https://storage.googleapis.com/panels-api/data/20240916/media-1a-i-p~s'
+
 
 async def delay(ms):
     await asyncio.sleep(ms / 1000)
+
 
 async def download_image(session, image_url, file_path):
     try:
@@ -21,6 +24,7 @@ async def download_image(session, image_url, file_path):
     except Exception as e:
         print(f"Error downloading image: {str(e)}")
 
+
 async def main():
     try:
         async with aiohttp.ClientSession() as session:
@@ -29,7 +33,7 @@ async def main():
                     raise Exception(f"⛔ Failed to fetch JSON file: {response.status}")
                 json_data = await response.json()
                 data = json_data.get('data')
-                
+
                 if not data:
                     raise Exception('⛔ JSON does not have a "data" property at its root.')
 
@@ -48,14 +52,18 @@ async def main():
                         filename = f"{file_index}{ext}"
                         file_path = os.path.join(download_dir, filename)
 
-                        await download_image(session, image_url, file_path)
-                        print(f"🖼️ Saved image to {file_path}")
+                        if os.path.exists(file_path):
+                            print(f"⚠️ File {file_path} already exists. Skipping download.")
+                        else:
+                            await download_image(session, image_url, file_path)
+                            print(f"🖼️ Saved image to {file_path}")
 
                         file_index += 1
                         await delay(250)
 
     except Exception as e:
         print(f"Error: {str(e)}")
+
 
 def ascii_art():
     print("""
@@ -69,6 +77,7 @@ def ascii_art():
 |__/     |__/|__/  \\__/|_______/  \\______/ |_______/""")
     print("")
     print("🤑 Starting downloads from your favorite sellout grifter's wallpaper app...")
+
 
 if __name__ == "__main__":
     ascii_art()
