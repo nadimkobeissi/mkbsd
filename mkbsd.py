@@ -1,3 +1,9 @@
+# /// script
+# requires-python = ">=3.9"
+# dependencies = [
+#     "aiohttp",
+# ]
+# ///
 # Licensed under the WTFPL License
 
 import os
@@ -29,7 +35,7 @@ async def main():
                     raise Exception(f"⛔ Failed to fetch JSON file: {response.status}")
                 json_data = await response.json()
                 data = json_data.get('data')
-                
+
                 if not data:
                     raise Exception('⛔ JSON does not have a "data" property at its root.')
 
