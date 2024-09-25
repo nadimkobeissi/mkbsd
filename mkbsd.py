@@ -8,9 +8,11 @@ from urllib.parse import urlparse
 
 url = 'https://storage.googleapis.com/panels-api/data/20240916/media-1a-i-p~s'
 MAX_IMAGES = 380
+MIN_AMOUNT_OF_IMAGES = 1
 
 async def delay(ms):
     await asyncio.sleep(ms / 1000)
+
 
 async def download_image(session, image_url, file_path):
     try:
@@ -23,10 +25,13 @@ async def download_image(session, image_url, file_path):
     except Exception as e:
         print(f"Error downloading image: {str(e)}")
 
+
 async def main():
     # Get user input for number of pictures and starting index
-    num_pictures = await ask_for_valid_number(f'How many pictures would you like to download? (Max: {MAX_IMAGES}) ', 1, MAX_IMAGES)
-    start_index = await ask_for_valid_number(f'From which picture (index) would you like to start? ', 1, MAX_IMAGES)
+    num_pictures = await ask_for_valid_number(f'How many pictures would you like to download? (Max: {MAX_IMAGES}) ',
+                                              MIN_AMOUNT_OF_IMAGES, MAX_IMAGES)
+    start_index = await ask_for_valid_number(f'From which picture (index) would you like to start? ',
+                                             MIN_AMOUNT_OF_IMAGES, MAX_IMAGES)
 
     try:
         async with aiohttp.ClientSession() as session:
@@ -69,6 +74,7 @@ async def main():
     except Exception as e:
         print(f"Error: {str(e)}")
 
+
 async def ask_for_valid_number(prompt, min_value, max_value):
     while True:
         try:
@@ -79,6 +85,7 @@ async def ask_for_valid_number(prompt, min_value, max_value):
                 print(f"🚫 Please enter a number between {min_value} and {max_value}.")
         except ValueError:
             print("🚫 Invalid input. Please enter a valid number.")
+
 
 def ascii_art():
     print("""
@@ -92,6 +99,7 @@ def ascii_art():
 |__/     |__/|__/  \\__/|_______/  \\______/ |_______/""")
     print("")
     print("🤑 Starting downloads from your favorite sellout grifter's wallpaper app...")
+
 
 if __name__ == "__main__":
     ascii_art()
