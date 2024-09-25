@@ -18,7 +18,7 @@ MKBSD comes in two variants! Node.js and Python.
 ### Running in Node.js
 
 1. Ensure you have Node.js installed.
-2. Run `node mkbsd.js`
+2. Run `node mkbsd.mjs` or `./mkbsd.mjs` if you're on a Unix-like system.
 3. Wait a little.
 4. All wallpapers are now in a newly created `downloads` subfolder.
 
