@@ -1,3 +1,9 @@
+# /// script
+# requires-python = ">=3.12"
+# dependencies = [
+#     "aiohttp",
+# ]
+# ///
 # Licensed under the WTFPL License
 
 import os
