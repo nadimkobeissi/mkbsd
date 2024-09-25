@@ -1,6 +1,19 @@
 use std::collections::HashMap;
 
+use clap::Parser;
 use serde::{Deserialize, Serialize};
+
+#[derive(Parser, Debug)]
+#[command(version, about, long_about = None)]
+struct Args {
+    /// Skip the delay and download files faster (only enable this if you absolutely cannot wait a bit longer)
+    #[arg(short, long, default_value_t = false)]
+    fast: bool,
+
+    /// Download all files, not just the "high res" ones
+    #[arg(short, long, default_value_t = false)]
+    all: bool,
+}
 
 #[derive(Debug, Deserialize, Serialize)]
 struct JsonData {
@@ -28,6 +41,8 @@ fn download_file(url: &str, filename: &str) -> Result<(), Box<dyn std::error::Er
 }
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let args = Args::parse();
+
     let file_url = "https://storage.googleapis.com/panels-api/data/20240916/media-1a-i-p~s";
 
     let Ok(json_text) = reqwest::blocking::get(file_url)?.text() else {
@@ -55,9 +70,17 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     );
     println!("\n 🤑 Starting downloads from your favorite sellout grifter's wallpaper app... \n");
 
+    if !args.fast {
+        std::thread::sleep(std::time::Duration::from_millis(5000));
+    }
+
     for (key_1, inner_map) in json_data.data {
         for (key_2, url) in inner_map {
-            if key_2 != "dhd" {
+            if !args.fast {
+                std::thread::sleep(std::time::Duration::from_millis(100));
+            }
+
+            if !args.all && key_2 != "dhd" {
                 continue;
             }
 
@@ -80,6 +103,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 Err(_) => {
                     println!("Error downloading file: {}", filename);
                 }
+            }
+
+            if !args.fast {
+                std::thread::sleep(std::time::Duration::from_millis(200));
             }
         }
     }
