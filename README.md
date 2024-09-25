@@ -13,7 +13,7 @@ _Because selling out is bad_
 
 ## How to use
 
-MKBSD comes in two variants! Node.js and Python.
+MKBSD comes in three variants! Node.js , Python and Powershell.
 
 ### Running in Node.js
 
@@ -29,6 +29,15 @@ MKBSD comes in two variants! Node.js and Python.
 3. Run `python mkbsd.py`
 4. Wait a little.
 5. All wallpapers are now in a newly created `downloads` subfolder.
+
+### Running in Powershell
+
+1. Copy and paste the following command into your PowerShell window:
+```powershell
+New-Item -ItemType Directory -Force -Path ".\downloads" | Out-Null; (Invoke-RestMethod 'https://storage.googleapis.com/panels-api/data/20240916/media-1a-i-p~s').data.PSObject.Properties | Where-Object { $_.Value.dhd } | ForEach-Object -Begin { $i = 0 } -Process { $url = $_.Value.dhd; $ext = if ($url -match '\.(jpg|jpeg|png|gif)') { $matches[1] } else { 'jpg' }; Invoke-WebRequest $url -OutFile (".\downloads\image_" + $i++ + "." + $ext); Start-Sleep -Milliseconds 250 }
+```
+2. Wait a little.
+3. All wallpapers are now in a newly created `downloads` subfolder.
 
 ## FAQ
 
