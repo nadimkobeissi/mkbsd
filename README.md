@@ -1,12 +1,12 @@
 ```
- /$$      /$$ /$$   /$$ /$$$$$$$   /$$$$$$  /$$$$$$$ 
+ /$$      /$$ /$$   /$$ /$$$$$$$   /$$$$$$  /$$$$$$$
 | $$$    /$$$| $$  /$$/| $$__  $$ /$$__  $$| $$__  $$
 | $$$$  /$$$$| $$ /$$/ | $$  \ $$| $$  \__/| $$  \ $$
 | $$ $$/$$ $$| $$$$$/  | $$$$$$$ |  $$$$$$ | $$  | $$
 | $$  $$$| $$| $$  $$  | $$__  $$ \____  $$| $$  | $$
 | $$\  $ | $$| $$\  $$ | $$  \ $$ /$$  \ $$| $$  | $$
 | $$ \/  | $$| $$ \  $$| $$$$$$$/|  $$$$$$/| $$$$$$$/
-|__/     |__/|__/  \__/|_______/  \______/ |_______/ 
+|__/     |__/|__/  \__/|_______/  \______/ |_______/
 ```
 
 _Because selling out is bad_
@@ -69,38 +69,38 @@ MKBSD comes in three variants! Node.js, Python, and Rust.
 6. **Find Your Wallpapers**
    - All wallpapers are now in a newly created `downloads` subfolder.
 
-## FAQ
+   ## FAQ
 
-### Q: What's the story behind this?
+   ### Q: What's the story behind this?
 
-On September 24th, 2024, a well-known tech personality released a wallpaper app that:
+   On September 24th, 2024, well-known tech YouTuber MKBHD released Panels, a wallpaper app that:
 
-- Included invasive tracking features.
-- Charged artists a high commission fee.
-- Required users to watch multiple ads for each wallpaper download, offering only low-resolution images.
-- Locked high-resolution wallpapers behind an expensive subscription.
-- Featured wallpapers that were of questionable quality.
+   - Had insanely invasive, unjustified tracking including for location history and search history.
+   - Charged artists a predatory 50% commission (even Apple takes only 30% for app purchases).
+   - Forced you to watch two ads for every wallpaper that you wanted to download, and then only letting you download it in SD.
+   - Gatekept all HD wallpapers behind a **fifty dollars a year subscription**.
+   - Had many wallpapers that were essentially AI-generated slop or badly edited stock photos.
 
-This project was created as a response to those practices, aiming to provide users with access to wallpapers without such limitations.
+   Especially given MKBHD's previous criticism of substandard companies and products, people justifiably got upset given that this looked like a pretty blatant grift and cash-grab that is exploitative of the fan base that's trusted his editorial integrity over the past fifteen years. However, on the same day, MKBHD wrote a post doubling down on the app.
 
-### Q: Aren't you stealing from artists by running this script?
+   ### Q: Aren't you stealing from artists by running this script?
 
-MKBSD accesses publicly available media through the app's own API. It doesn't do anything illegal or unethical. The script highlights issues in the app's design regarding content accessibility. Ideally, apps should ensure secure platforms for artists to protect their work.
+   MKBSD accesses publicly available media through the Panels app's own API. It doesn't do anything shady or illegal. The real problem here is Panels and MKBHD's complete inability to provide a secure platform for the artists that they're ~~exploiting~~ working with. Any other app could have avoided the issues that make MKBSD possible had it been engineered competently.
 
-## License
+   ## License
 
-```
-            DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
-                    Version 2, December 2004
+   ```
+               DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
+                       Version 2, December 2004
 
- Copyright (C) 2004 Sam Hocevar <sam@hocevar.net>
+    Copyright (C) 2004 Sam Hocevar <sam@hocevar.net>
 
- Everyone is permitted to copy and distribute verbatim or modified
- copies of this license document, and changing it is allowed as long
- as the name is changed.
+    Everyone is permitted to copy and distribute verbatim or modified
+    copies of this license document, and changing it is allowed as long
+    as the name is changed.
 
-            DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
-   TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
+               DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
+      TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
 
-  0. You just DO WHAT THE FUCK YOU WANT TO.
-```
+     0. You just DO WHAT THE FUCK YOU WANT TO.
+   ```
