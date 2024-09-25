@@ -30,6 +30,15 @@ MKBSD comes in two variants! Node.js and Python.
 4. Wait a little.
 5. All wallpapers are now in a newly created `downloads` subfolder.
 
+### Running in C#
+
+1. Ensure you have dotnet installed.
+2. Navigate to `mkbsdSharp` folder.
+3. Run `dotnet run`
+4. Wait a little.
+4. All wallpapers are now in a newly created `downloads` subfolder.
+
+
 ## FAQ
 
 ### Q: What's the story behind this?
