@@ -4,24 +4,28 @@ import os
 import time
 import aiohttp
 import asyncio
+from tqdm import tqdm
 from urllib.parse import urlparse
+
 url = 'https://storage.googleapis.com/panels-api/data/20240916/media-1a-i-p~s'
 
 async def delay(ms):
     await asyncio.sleep(ms / 1000)
 
-async def download_image(session, image_url, file_path):
+async def download_image(session, image_url, file_path, error_log):
     try:
         async with session.get(image_url) as response:
             if response.status != 200:
-                raise Exception(f"Failed to download image: {response.status}")
+                raise Exception(f"Error code: {response.status}")
             content = await response.read()
             with open(file_path, 'wb') as f:
                 f.write(content)
     except Exception as e:
-        print(f"Error downloading image: {str(e)}")
+        error_log.append(f"Error downloading image {image_url}[{str(e)}]")
 
 async def main():
+    error_log = []
+
     try:
         async with aiohttp.ClientSession() as session:
             async with session.get(url) as response:
@@ -39,23 +43,34 @@ async def main():
                     print(f"📁 Created directory: {download_dir}")
 
                 file_index = 1
-                for key, subproperty in data.items():
-                    if subproperty and subproperty.get('dhd'):
-                        image_url = subproperty['dhd']
-                        print(f"🔍 Found image URL!")
-                        parsed_url = urlparse(image_url)
-                        ext = os.path.splitext(parsed_url.path)[-1] or '.jpg'
-                        filename = f"{file_index}{ext}"
-                        file_path = os.path.join(download_dir, filename)
+                total_images = len([key for key, subproperty in data.items() if subproperty.get('dhd')])
 
-                        await download_image(session, image_url, file_path)
-                        print(f"🖼️ Saved image to {file_path}")
+                # initialize progress bar with the total number of images
+                with tqdm(total=total_images, desc="Downloading", unit="image", colour="red") as pbar:
+                    for key, subproperty in data.items(): 
+                        if subproperty and subproperty.get('dhd'):
+                            image_url = subproperty['dhd']
+                            parsed_url = urlparse(image_url)
+                            ext = os.path.splitext(parsed_url.path)[-1] or '.jpg'
+                            filename = f"{file_index}{ext}"
+                            file_path = os.path.join(download_dir, filename)
+                            await download_image(session, image_url, file_path, error_log)
 
-                        file_index += 1
-                        await delay(250)
+                            pbar.update(1)
+                            file_index += 1
+
+                            await delay(250)
 
     except Exception as e:
         print(f"Error: {str(e)}")
+
+    # After all downloads, report any errors that occurred
+    if error_log:
+        print("\n⚠️ The following errors occurred during downloads:")
+        for error in error_log:
+            print(error)
+    else:
+        print("\n✅ All images downloaded successfully!")
 
 def ascii_art():
     print("""
