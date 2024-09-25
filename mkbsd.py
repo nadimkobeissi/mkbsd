@@ -4,8 +4,11 @@ import os
 import time
 import aiohttp
 import asyncio
+import ssl
 from urllib.parse import urlparse
+
 url = 'https://storage.googleapis.com/panels-api/data/20240916/media-1a-i-p~s'
+
 
 async def delay(ms):
     await asyncio.sleep(ms / 1000)
@@ -23,7 +26,12 @@ async def download_image(session, image_url, file_path):
 
 async def main():
     try:
-        async with aiohttp.ClientSession() as session:
+        # Create an SSL context that does not verify certificates
+        ssl_context = ssl.create_default_context()
+        ssl_context.check_hostname = False
+        ssl_context.verify_mode = ssl.CERT_NONE
+
+        async with aiohttp.ClientSession(connector=aiohttp.TCPConnector(ssl=ssl_context)) as session:
             async with session.get(url) as response:
                 if response.status != 200:
                     raise Exception(f"⛔ Failed to fetch JSON file: {response.status}")
