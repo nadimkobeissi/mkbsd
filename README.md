@@ -30,6 +30,14 @@ MKBSD comes in two variants! Node.js and Python.
 4. Wait a little.
 5. All wallpapers are now in a newly created `downloads` subfolder.
 
+### Running in Nim
+
+1. Ensure that you have a C compiler installed
+2. Download [`nimble`](https://github.com/nim-lang/nimble/releases/latest)
+3. Run `nimble run`
+4. Wait a little.
+5. All wallpapers are now in a newly created `downloads` subfolder.
+
 ## FAQ
 
 ### Q: What's the story behind this?
