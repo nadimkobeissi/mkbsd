@@ -27,12 +27,12 @@ async function main() {
 		let fileIndex = 1;
 		for (const key in data) {
 			const subproperty = data[key];
-			if (subproperty && subproperty.dhd) {
-				const imageUrl = subproperty.dhd;
+			for(const subpropertyKey in subproperty) {
+				const imageUrl = subproperty[subpropertyKey];
 				console.info(`🔍 Found image URL!`);
 				await delay(100);
 				const ext = path.extname(new URL(imageUrl).pathname) || '.jpg';
-				const filename = `${fileIndex}${ext}`;
+				const filename = `${key}-${subpropertyKey}${ext}`;
 				const filePath = path.join(downloadDir, filename);
 				await downloadImage(imageUrl, filePath);
 				console.info(`🖼️ Saved image to ${filePath}`);
