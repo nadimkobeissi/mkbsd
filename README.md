@@ -37,7 +37,10 @@ MKBSD comes in three variants! Node.js, Python, and Rust.
 
 2. **Navigate to the Rust Implementation Directory**
    - Open your terminal or command prompt.
-   - Navigate to the directory containing the Rust implementation (e.g., `mkbsd.rs` or the Cargo project folder).
+   - Navigate to the directory containing the Rust implementation.
+     ```bash
+     cd MKBSD
+     ```
 
 3. **Build the Project**
    - Run the following command to build the project in release mode:
