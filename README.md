@@ -31,8 +31,8 @@ MKBSD comes in two variants! Node.js and Python.
 5. All wallpapers are now in a newly created `downloads` subfolder.
 
 Alternatively, instead of steps 1-3, you can:
-* Install uv (https://docs.astral.sh/uv/#getting-started)
-* Run `uv run mkbsd.py`
+1. Install uv (https://docs.astral.sh/uv/#getting-started)
+2. Run `uv run mkbsd.py`
 
 ## FAQ
 
