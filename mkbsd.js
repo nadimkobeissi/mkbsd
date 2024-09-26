@@ -1,61 +1,32 @@
 // Copyright 2024 Nadim Kobeissi
 // Licensed under the WTFPL License
 
-const fs = require(`fs`);
-const path = require(`path`);
+const { existsSync, mkdirSync, rmSync, readdirSync, writeFileSync } = require(`fs`);
+const { extname, join } = require(`path`);
 
-async function main() {
-	const url = 'https://storage.googleapis.com/panels-api/data/20240916/media-1a-i-p~s';
-	const delay = (ms) => {
-		return new Promise(resolve => setTimeout(resolve, ms));
-	}
-	try {
-		const response = await fetch(url);
-		if (!response.ok) {
-			throw new Error(`⛔ Failed to fetch JSON file: ${response.statusText}`);
-		}
-		const jsonData = await response.json();
-		const data = jsonData.data;
-		if (!data) {
-			throw new Error('⛔ JSON does not have a "data" property at its root.');
-		}
-		const downloadDir = path.join(__dirname, 'downloads');
-		if (!fs.existsSync(downloadDir)) {
-			fs.mkdirSync(downloadDir);
-			console.info(`📁 Created directory: ${downloadDir}`);
-		}
-		let fileIndex = 1;
-		for (const key in data) {
-			const subproperty = data[key];
-			if (subproperty && subproperty.dhd) {
-				const imageUrl = subproperty.dhd;
-				console.info(`🔍 Found image URL!`);
-				await delay(100);
-				const ext = path.extname(new URL(imageUrl).pathname) || '.jpg';
-				const filename = `${fileIndex}${ext}`;
-				const filePath = path.join(downloadDir, filename);
-				await downloadImage(imageUrl, filePath);
-				console.info(`🖼️ Saved image to ${filePath}`);
-				fileIndex++;
-				await delay(250);
-			}
-		}
-	} catch (error) {
-		console.error(`Error: ${error.message}`);
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// UTILITIES
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+const printError = (message, { exit } = { exit: true }) => {
+	console.error(`\n⛔ ${message}`)
+	
+	if (exit) {
+		process.exit(1)
 	}
 }
 
-async function downloadImage(url, filePath) {
-	const response = await fetch(url);
-	if (!response.ok) {
-		throw new Error(`Failed to download image: ${response.statusText}`);
-	}
-	const arrayBuffer = await response.arrayBuffer();
-	const buffer = Buffer.from(arrayBuffer);
-	await fs.promises.writeFile(filePath, buffer);
+const printSuccess = (message) => {
+	console.info(`✅ ${message}`)
 }
 
-function asciiArt() {
+const printLineBreak = () => {
+	console.log(`\n------------------------------------------\n`)
+}
+
+const delayBy = async (ms, cb) => await new Promise((resolve) => setTimeout(() => resolve(cb()), ms))
+
+const printAscii = () => {
 	console.info(`
  /$$      /$$ /$$   /$$ /$$$$$$$   /$$$$$$  /$$$$$$$
 | $$$    /$$$| $$  /$$/| $$__  $$ /$$__  $$| $$__  $$
@@ -64,12 +35,98 @@ function asciiArt() {
 | $$  $$$| $$| $$  $$  | $$__  $$ \\____  $$| $$  | $$
 | $$\\  $ | $$| $$\\  $$ | $$  \\ $$ /$$  \\ $$| $$  | $$
 | $$ \\/  | $$| $$ \\  $$| $$$$$$$/|  $$$$$$/| $$$$$$$/
-|__/     |__/|__/  \\__/|_______/  \\______/ |_______/`);
-	console.info(``);
-	console.info(`🤑 Starting downloads from your favorite sellout grifter's wallpaper app...`);
+|__/     |__/|__/  \\__/|_______/  \\______/ |_______/
+
+🤑 Starting downloads from your favorite sellout grifter's wallpaper app...`)
 }
 
-(() => {
-	asciiArt();
-	setTimeout(main, 5000);
-})();
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// ACTIONS
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+const fetchAssetData = async () => {
+	try {
+		const response = await fetch('https://storage.googleapis.com/panels-api/data/20240916/media-1a-i-p~s')
+		if (!response.ok) {
+			printError(`Failed to fetch asset data from Panels API: ${response.statusText}`)
+		}
+	
+		const { data } = await response.json()
+		if (!data) {
+			printError('Failed to fetch asset data from Panels API: data not found')
+		}
+
+		printSuccess(`Successfully downloaded asset data from Panels API`)
+	
+		return data
+	}
+	catch (error) {
+		error(`Error downloading asset data from Panels API: ${error}`)
+	}
+}
+
+const initializeDownloadDirectory = () => {
+	try {
+		const downloadDirectory = join(__dirname, 'downloads')
+	
+		if (existsSync(downloadDirectory)) {
+			rmSync(downloadDirectory, { recursive: true, force: true })
+		}
+		mkdirSync(downloadDirectory)
+
+		printSuccess(`Initialized download directory: ${downloadDirectory}`)
+	
+		return downloadDirectory
+	}
+	catch (error) {
+		exitWithError(`⛔ Error initializing download directory '${downloadDirectory}': ${error}`)
+	}
+}
+
+const downloadImages = (data, downloadDirectory) => 
+	Promise.all(
+		Object.values(data)
+			.filter((assetMap) => !!assetMap.dhd)
+			.map(({ dhd: url }, i) => {
+			// TODO extract actual image name past /content to first ?
+			const fileName = `${i + 1}${extname(new URL(url).pathname) || '.jpg'}`
+			const filePath = join(downloadDirectory, fileName)
+
+			return fetch(url)
+				.then(async (response) => {
+					if (!response.ok) {
+						printError(`Failed to download image '${url}' with status text: '${response.statusText}'`, { exit: false })
+						return
+					}
+
+					writeFileSync(filePath, Buffer.from(await response.arrayBuffer()))
+
+					printSuccess(`Downloaded image: ${url}`)
+				})
+				.catch((error) => {
+					error(`Failed to download image '${url}' with error: ${error}`, { exit: false })
+				})
+			})
+	)
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// SCRIPT
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+const mkbsd = async () => {
+	printAscii()
+	printLineBreak()
+
+	const data = await delayBy(500, fetchAssetData)
+	const downloadDirectory = await delayBy(500, initializeDownloadDirectory)
+	
+	printLineBreak()
+	console.log('Beginning image download...\n\n')
+
+	await delayBy(500, downloadImages.bind(null, data, downloadDirectory))
+
+	printLineBreak()
+	printSuccess(`DONE! Downloaded ${readdirSync(downloadDirectory).length} images from Panels API`)
+}
+
+mkbsd()
