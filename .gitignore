@@ -1,2 +1,4 @@
 .DS_Store
 downloads
+.dart_tool
+pubspec.lock

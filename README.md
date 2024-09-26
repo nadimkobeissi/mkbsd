@@ -1,12 +1,12 @@
 ```
- /$$      /$$ /$$   /$$ /$$$$$$$   /$$$$$$  /$$$$$$$ 
+ /$$      /$$ /$$   /$$ /$$$$$$$   /$$$$$$  /$$$$$$$
 | $$$    /$$$| $$  /$$/| $$__  $$ /$$__  $$| $$__  $$
 | $$$$  /$$$$| $$ /$$/ | $$  \ $$| $$  \__/| $$  \ $$
 | $$ $$/$$ $$| $$$$$/  | $$$$$$$ |  $$$$$$ | $$  | $$
 | $$  $$$| $$| $$  $$  | $$__  $$ \____  $$| $$  | $$
 | $$\  $ | $$| $$\  $$ | $$  \ $$ /$$  \ $$| $$  | $$
 | $$ \/  | $$| $$ \  $$| $$$$$$$/|  $$$$$$/| $$$$$$$/
-|__/     |__/|__/  \__/|_______/  \______/ |_______/ 
+|__/     |__/|__/  \__/|_______/  \______/ |_______/
 ```
 
 _Because selling out is bad_
@@ -29,6 +29,13 @@ MKBSD comes in two variants! Node.js and Python.
 3. Run `python mkbsd.py`
 4. Wait a little.
 5. All wallpapers are now in a newly created `downloads` subfolder.
+
+### Running in Dart
+
+1. Ensure you have Node.js installed.
+2. Run `dart run mkbsd.dart`
+3. Wait a little.
+4. All wallpapers are now in a newly created `downloads` subfolder.
 
 ## FAQ
 
