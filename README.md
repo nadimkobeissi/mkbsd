@@ -48,6 +48,12 @@ Especially given MKBHD's previous criticism of substandard companies and product
 
 MKBSD accesses publicly available media through the Panels app's own API. It doesn't do anything shady or illegal. The real problem here is Panels and MKBHD's complete inability to provide a secure platform for the artists that they're ~~exploiting~~ working with. Any other app could have avoided the issues that make MKBSD possible had it been engineered competently.
 
+### Q: Does MKBHD ever mention any of the Genocides committed by companies he reviews products for?
+
+MKBHD has not made any statements on Google's role in the genocide in Palestine funded by the US and carried out by Israel https://www.aljazeera.com/news/2024/4/23/what-is-project-nimbus-and-why-are-google-workers-protesting-israel-deal
+MKBHD has never mentioned the fact Apple and Google are some of the richest companies in the world ran by Billionaires like Tim Cook that use slave labour https://apnews.com/article/apple-iphones-congo-blood-minerals-b1f20aa7bd3a3f4f8cf7fcde19c6f053 https://fortune.com/2020/12/14/apple-iphone-india-factory-workers-protest-attack/
+
+
 ## License
 
 ```
