@@ -53,11 +53,14 @@ async def main():
                                 os.makedirs(artist_dir)
                                 print(f"📁 Created artist directory: {artist_dir}")
 
-                        file_name_match = re.search(r'/([^/]+)\.(jpg|png)', image_url) # Extract file name from URL
+                        file_name_match = re.search(r'/([^/]+)\?', image_url) # Extract file name from URL
                         if file_name_match:
                             raw_file_name = file_name_match.group(1)
-                            sanitized_file_name = re.sub(r'[^a-zA-Z0-9 ]', '', raw_file_name).replace('~', ' ')
-                            file_path = os.path.join(artist_dir, f"{sanitized_file_name}.jpg")
+                            file_name = raw_file_name.split('.')[0]
+                            file_extension = raw_file_name.split('.')[-1]
+                            sanitized_file_name = file_name.replace('~', ' ')
+                            file_path = os.path.join(artist_dir, f"{sanitized_file_name}." + file_extension)
+                            print(f"📄 File path: {file_path}")
 
                             await download_image(session, image_url, file_path)
                             print(f"🖼️ Saved image to {file_path}")
