@@ -1,0 +1,26 @@
+name: Download and Upload MKBSD "Panels" Wallpaper
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Run Python Script & Create zip file
+        run: |
+         apt install sudo
+         sudo apt update
+         sudo apt install python3
+         pip install aiohttp
+         python3 mkbsd.py
+         zip -r downloads.zip downloads
+           
+      - name: Upload Downloads Zip File to Release 
+        uses: softprops/action-gh-release@master
+        with:
+         files: |
+          /home/runner/work/mkbsd/mkbsd/downloads.zip
+         name: MKBHD's "Panels" Wallpapers Upload 
+         tag_name: ${{ github.run_id }}
