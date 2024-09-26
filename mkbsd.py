@@ -1,11 +1,14 @@
-# Licensed under the WTFPL License
-
 import os
 import time
 import aiohttp
 import asyncio
 from urllib.parse import urlparse
+from threading import Event
+
 url = 'https://storage.googleapis.com/panels-api/data/20240916/media-1a-i-p~s'
+
+# Global stop event to signal when to stop downloading
+stop_event = Event()
 
 async def delay(ms):
     await asyncio.sleep(ms / 1000)
@@ -41,6 +44,9 @@ async def main():
                 file_index = 1
                 for key, subproperty in data.items():
                     if subproperty and subproperty.get('dhd'):
+                        if stop_event.is_set():
+                            print("⛔ Download stopped!")
+                            break
                         image_url = subproperty['dhd']
                         print(f"🔍 Found image URL!")
                         parsed_url = urlparse(image_url)
@@ -57,6 +63,17 @@ async def main():
     except Exception as e:
         print(f"Error: {str(e)}")
 
+def start_download():
+    global stop_event
+    stop_event.clear()  # Clear the stop event before starting
+    print("🚀 Starting download process!")
+    asyncio.run(main())
+
+def stop_download():
+    global stop_event
+    stop_event.set()  # Set the stop event to signal the process to stop
+    print("🛑 Stopping download process!")
+
 def ascii_art():
     print("""
  /$$      /$$ /$$   /$$ /$$$$$$$   /$$$$$$  /$$$$$$$
@@ -68,9 +85,19 @@ def ascii_art():
 | $$ \\/  | $$| $$ \\  $$| $$$$$$$/|  $$$$$$/| $$$$$$$/
 |__/     |__/|__/  \\__/|_______/  \\______/ |_______/""")
     print("")
-    print("🤑 Starting downloads from your favorite sellout grifter's wallpaper app...")
+    print("🤑 Ready to download from your favorite sellout grifter's wallpaper app...")
 
 if __name__ == "__main__":
     ascii_art()
-    time.sleep(5)
-    asyncio.run(main())
+    time.sleep(2)
+
+    user_input = input("Press 's' to start downloading, or 'q' to quit: ").lower()
+    
+    while user_input != 'q':
+        if user_input == 's':
+            start_download()
+        user_input = input("Press 's' to start downloading again or 'q' to quit. Press 'x' to stop the download: ").lower()
+        if user_input == 'x':
+            stop_download()
+
+    print("👋 Exiting the program.")
