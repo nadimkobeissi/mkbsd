@@ -32,7 +32,7 @@ MKBSD comes in two variants! Node.js and Python.
 
 ### Running in Dart
 
-1. Ensure you have Node.js installed.
+1. Ensure you have Dart installed.
 2. Run `dart run mkbsd.dart`
 3. Wait a little.
 4. All wallpapers are now in a newly created `downloads` subfolder.
