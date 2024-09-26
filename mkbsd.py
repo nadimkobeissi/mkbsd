@@ -1,61 +1,54 @@
-# Licensed under the WTFPL License
-
+import requests
 import os
-import time
-import aiohttp
-import asyncio
-from urllib.parse import urlparse
-url = 'https://storage.googleapis.com/panels-api/data/20240916/media-1a-i-p~s'
+import json
+from concurrent.futures import ThreadPoolExecutor
 
-async def delay(ms):
-    await asyncio.sleep(ms / 1000)
+# URL of the JSON data
+all_url = "https://storage.googleapis.com/panels-cdn/data/20240730/all.json"
 
-async def download_image(session, image_url, file_path):
-    try:
-        async with session.get(image_url) as response:
-            if response.status != 200:
-                raise Exception(f"Failed to download image: {response.status}")
-            content = await response.read()
-            with open(file_path, 'wb') as f:
-                f.write(content)
-    except Exception as e:
-        print(f"Error downloading image: {str(e)}")
+# Function to download the URL
+def download_url(url):
+    file_name = os.path.basename(url)
+    file_path = os.path.join("downloads", file_name)
 
-async def main():
-    try:
-        async with aiohttp.ClientSession() as session:
-            async with session.get(url) as response:
-                if response.status != 200:
-                    raise Exception(f"⛔ Failed to fetch JSON file: {response.status}")
-                json_data = await response.json()
-                data = json_data.get('data')
-                
-                if not data:
-                    raise Exception('⛔ JSON does not have a "data" property at its root.')
+    if not os.path.exists(file_path):
+        print(f"Downloading {url}")
+        response = requests.get(url)
+        with open(file_path, 'wb') as file:
+            file.write(response.content)
+    else:
+        print(f"Skipping {url}")
 
-                download_dir = os.path.join(os.getcwd(), 'downloads')
-                if not os.path.exists(download_dir):
-                    os.makedirs(download_dir)
-                    print(f"📁 Created directory: {download_dir}")
+# Recursive function to extract URLs from JSON structure
+def extract_urls(element, urls):
+    if isinstance(element, dict):
+        for key, value in element.items():
+            if key == "url":
+                urls.append(value)
+            else:
+                extract_urls(value, urls)
+    elif isinstance(element, list):
+        for item in element:
+            extract_urls(item, urls)
 
-                file_index = 1
-                for key, subproperty in data.items():
-                    if subproperty and subproperty.get('dhd'):
-                        image_url = subproperty['dhd']
-                        print(f"🔍 Found image URL!")
-                        parsed_url = urlparse(image_url)
-                        ext = os.path.splitext(parsed_url.path)[-1] or '.jpg'
-                        filename = f"{file_index}{ext}"
-                        file_path = os.path.join(download_dir, filename)
+# Main function to process the JSON and download files
+def main():
+    # Fetch the JSON data
+    response = requests.get(all_url)
+    json_data = response.json()
 
-                        await download_image(session, image_url, file_path)
-                        print(f"🖼️ Saved image to {file_path}")
+    # Extract URLs
+    urls = []
+    extract_urls(json_data, urls)
+    print(f"Found {len(urls)} URLs")
 
-                        file_index += 1
-                        await delay(250)
+    # Ensure 'downloads' directory exists
+    if not os.path.exists("downloads"):
+        os.makedirs("downloads")
 
-    except Exception as e:
-        print(f"Error: {str(e)}")
+    # Download files with parallelism (max 10 threads)
+    with ThreadPoolExecutor(max_workers=10) as executor:
+        executor.map(download_url, urls)
 
 def ascii_art():
     print("""
@@ -73,4 +66,4 @@ def ascii_art():
 if __name__ == "__main__":
     ascii_art()
     time.sleep(5)
-    asyncio.run(main())
+    main()
