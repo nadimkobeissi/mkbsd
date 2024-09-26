@@ -24,20 +24,36 @@ async function main() {
 			fs.mkdirSync(downloadDir);
 			console.info(`📁 Created directory: ${downloadDir}`);
 		}
-		let fileIndex = 1;
 		for (const key in data) {
 			const subproperty = data[key];
 			if (subproperty && subproperty.dhd) {
 				const imageUrl = subproperty.dhd;
-				console.info(`🔍 Found image URL!`);
+				console.info(`🔍 Found image URL!`, imageUrl);
 				await delay(100);
-				const ext = path.extname(new URL(imageUrl).pathname) || '.jpg';
-				const filename = `${fileIndex}${ext}`;
-				const filePath = path.join(downloadDir, filename);
-				await downloadImage(imageUrl, filePath);
-				console.info(`🖼️ Saved image to ${filePath}`);
-				fileIndex++;
-				await delay(250);
+
+				const match = imageUrl.match(/\/content\/([^/]+)\//);
+				let artistName = match[1];
+				artistName = artistName.replace(/^[a~]+|_[^_]+$/g, '');
+				// Create folder with artist's name
+				const artistDir = path.join(downloadDir, artistName);
+				if (!fs.existsSync(artistDir)) {
+					fs.mkdirSync(artistDir, { recursive: true });
+				}
+
+				 // Extract and clean file name
+				const fileNameMatch = imageUrl.match(/\/([^/]+)\?/);
+				let cleanFileName = '';
+				 
+				if (fileNameMatch) {
+					let cleanFileName = fileNameMatch[1].replace(/~/g, ' ');
+					const filePath = path.join(artistDir, cleanFileName);
+
+					console.info('📂', filePath);
+
+					await downloadImage(imageUrl, filePath);
+					console.info(`🖼️ Saved image to ${filePath}`);
+					await delay(250);
+				}
 			}
 		}
 	} catch (error) {
