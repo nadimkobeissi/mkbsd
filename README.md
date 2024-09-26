@@ -30,6 +30,13 @@ MKBSD comes in two variants! Node.js and Python.
 4. Wait a little.
 5. All wallpapers are now in a newly created `downloads` subfolder.
 
+### Running in Github Actions
+1. Fork the repo
+2. Go to actions
+3. Press on `All workflows` then choose `Download and Upload MKBSD "Panels" Wallpaper`
+4. Press on `Run workflow`
+Wait until the process end then check releases and you will find `downloads.zip` file
+
 ## FAQ
 
 ### Q: What's the story behind this?
