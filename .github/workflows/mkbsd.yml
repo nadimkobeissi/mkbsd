@@ -10,7 +10,6 @@ jobs:
       
       - name: Run Python Script & Create zip file
         run: |
-         apt install sudo
          sudo apt update
          sudo apt install python3
          pip install aiohttp
