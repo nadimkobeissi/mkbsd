@@ -40,6 +40,15 @@ const printAscii = () => {
 🤑 Starting downloads from your favorite sellout grifter's wallpaper app...`)
 }
 
+const extractImageName = (url) =>
+	decodeURIComponent(
+		(new RegExp(/^https:\/\/.*\/content\/(.*.[a-zA-Z])\?/).exec(url)[1] || '')
+			.replace(`a~`, '')
+			.replace(/(_[a-z0-9]+)\//, ' - ')
+			.replace('/', ' - ')
+			.replace(/~+/g, ' ')
+	)
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // ACTIONS
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -88,8 +97,7 @@ const downloadImages = (data, downloadDirectory) =>
 		Object.values(data)
 			.filter((assetMap) => !!assetMap.dhd)
 			.map(({ dhd: url }, i) => {
-			// TODO extract actual image name past /content to first ?
-			const fileName = `${i + 1}${extname(new URL(url).pathname) || '.jpg'}`
+			const fileName = `[${i + 1}] - ${extractImageName(url)}`
 			const filePath = join(downloadDirectory, fileName)
 
 			return fetch(url)
