@@ -60,7 +60,7 @@ async def main():
                             file_extension = raw_file_name.split('.')[-1]
                             sanitized_file_name = file_name.replace('~', ' ')
                             file_path = os.path.join(artist_dir, f"{sanitized_file_name}." + file_extension)
-                            print(f"📄 File path: {file_path}")
+                            # print(f"📄 File path: {file_path}")
 
                             await download_image(session, image_url, file_path)
                             print(f"🖼️ Saved image to {file_path}")
