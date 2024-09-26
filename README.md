@@ -13,7 +13,7 @@ _Because selling out is bad_
 
 ## How to use
 
-MKBSD comes in two variants! Node.js and Python.
+MKBSD comes in two variants! Node.js, Python and Java.
 
 ### Running in Node.js
 
@@ -29,6 +29,13 @@ MKBSD comes in two variants! Node.js and Python.
 3. Run `python mkbsd.py`
 4. Wait a little.
 5. All wallpapers are now in a newly created `downloads` subfolder.
+
+### Running in Java w/JBang
+
+1. Ensure you have JBang installed. 
+2. Run `jbang mkbsd.java`
+3. Wait a little.
+4. All wallpapers are now in a newly created `downloads` subfolder.
 
 ## FAQ
 
