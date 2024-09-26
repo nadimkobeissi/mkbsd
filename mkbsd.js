@@ -70,7 +70,7 @@ const fetchAssetData = async () => {
 		return data
 	}
 	catch (error) {
-		error(`Error downloading asset data from Panels API: ${error}`)
+		printError(`Error downloading asset data from Panels API: ${error}`)
 	}
 }
 
@@ -88,7 +88,7 @@ const initializeDownloadDirectory = () => {
 		return downloadDirectory
 	}
 	catch (error) {
-		exitWithError(`⛔ Error initializing download directory '${downloadDirectory}': ${error}`)
+		printError(`Error initializing download directory '${downloadDirectory}': ${error}`)
 	}
 }
 
@@ -112,7 +112,7 @@ const downloadImages = (data, downloadDirectory) =>
 					printSuccess(`Downloaded image: ${url}`)
 				})
 				.catch((error) => {
-					error(`Failed to download image '${url}' with error: ${error}`, { exit: false })
+					printError(`Failed to download image '${url}' with error: ${error}`, { exit: false })
 				})
 			})
 	)
