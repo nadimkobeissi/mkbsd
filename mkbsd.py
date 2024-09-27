@@ -5,6 +5,7 @@ import time
 import aiohttp
 import asyncio
 from urllib.parse import urlparse
+
 url = 'https://storage.googleapis.com/panels-api/data/20240916/media-1a-i-p~s'
 
 async def delay(ms):
@@ -38,20 +39,19 @@ async def main():
                     os.makedirs(download_dir)
                     print(f"📁 Created directory: {download_dir}")
 
-                file_index = 1
-                for key, subproperty in data.items():
+                for file_index, (key, subproperty) in enumerate(data.items(), start=1):
                     if subproperty and subproperty.get('dhd'):
                         image_url = subproperty['dhd']
                         print(f"🔍 Found image URL!")
                         parsed_url = urlparse(image_url)
-                        ext = os.path.splitext(parsed_url.path)[-1] or '.jpg'
-                        filename = f"{file_index}{ext}"
-                        file_path = os.path.join(download_dir, filename)
+                        
+                        # Extrahiere den Dateinamen ohne .jpg
+                        filename = os.path.basename(parsed_url.path).replace('.jpg', '') or f'image_{file_index}'
+                        file_path = os.path.join(download_dir, f"{filename}.jpg")
 
                         await download_image(session, image_url, file_path)
                         print(f"🖼️ Saved image to {file_path}")
 
-                        file_index += 1
                         await delay(250)
 
     except Exception as e:
