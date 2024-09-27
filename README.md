@@ -1,12 +1,12 @@
 ```
- /$$      /$$ /$$   /$$ /$$$$$$$   /$$$$$$  /$$$$$$$ 
+ /$$      /$$ /$$   /$$ /$$$$$$$   /$$$$$$  /$$$$$$$
 | $$$    /$$$| $$  /$$/| $$__  $$ /$$__  $$| $$__  $$
 | $$$$  /$$$$| $$ /$$/ | $$  \ $$| $$  \__/| $$  \ $$
 | $$ $$/$$ $$| $$$$$/  | $$$$$$$ |  $$$$$$ | $$  | $$
 | $$  $$$| $$| $$  $$  | $$__  $$ \____  $$| $$  | $$
 | $$\  $ | $$| $$\  $$ | $$  \ $$ /$$  \ $$| $$  | $$
 | $$ \/  | $$| $$ \  $$| $$$$$$$/|  $$$$$$/| $$$$$$$/
-|__/     |__/|__/  \__/|_______/  \______/ |_______/ 
+|__/     |__/|__/  \__/|_______/  \______/ |_______/
 ```
 
 _Because selling out is bad_
@@ -47,6 +47,10 @@ Especially given MKBHD's previous criticism of substandard companies and product
 ### Q: Aren't you stealing from artists by running this script?
 
 MKBSD accesses publicly available media through the Panels app's own API. It doesn't do anything shady or illegal. The real problem here is Panels and MKBHD's complete inability to provide a secure platform for the artists that they're ~~exploiting~~ working with. Any other app could have avoided the issues that make MKBSD possible had it been engineered competently.
+
+### Q: What does this download?
+
+MKBSD downloads 378 images, which are not worth your time.
 
 ## License
 
