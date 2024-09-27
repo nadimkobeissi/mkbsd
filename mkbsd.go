@@ -22,7 +22,7 @@ type Response struct {
 
 const DATA_URL = "https://storage.googleapis.com/panels-api/data/20240916/media-1a-i-p~s"
 
-func downloadImages(x string, rawURL string, downloadsPath string, wg *sync.WaitGroup, channel chan<- string) {
+func downloadImages(key string, rawURL string, downloadsPath string, wg *sync.WaitGroup, channel chan<- string) {
 	defer wg.Done()
 
 	resp, err := http.Get(rawURL)
@@ -35,7 +35,7 @@ func downloadImages(x string, rawURL string, downloadsPath string, wg *sync.Wait
 
 	defer resp.Body.Close()
 
-	imageFileName := filepath.Join(downloadsPath, x+".jpg")
+	imageFileName := filepath.Join(downloadsPath, key+".jpg")
 	outFile, err := os.Create(imageFileName)
 	if err != nil {
 		res := fmt.Sprintf("failed to create file: %v", err)
@@ -101,10 +101,10 @@ func main() {
 
 	var wg sync.WaitGroup
 
-	for x, v := range response.Data {
+	for key, v := range response.Data {
 		if v.Dhd != "" {
 			wg.Add(1)
-			go downloadImages(x, v.Dhd, downloadsPath, &wg, channel)
+			go downloadImages(key, v.Dhd, downloadsPath, &wg, channel)
 		}
 	}
 
