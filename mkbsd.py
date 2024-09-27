@@ -1,5 +1,3 @@
-# Licensed under the WTFPL License
-
 import os
 import time
 import aiohttp
@@ -34,24 +32,27 @@ async def main():
                 if not data:
                     raise Exception('⛔ JSON does not have a "data" property at its root.')
 
-                download_dir = os.path.join(os.getcwd(), 'downloads')
-                if not os.path.exists(download_dir):
-                    os.makedirs(download_dir)
-                    print(f"📁 Created directory: {download_dir}")
-
-                for file_index, (key, subproperty) in enumerate(data.items(), start=1):
+                for key, subproperty in data.items():
                     if subproperty and subproperty.get('dhd'):
                         image_url = subproperty['dhd']
                         print(f"🔍 Found image URL!")
-                        parsed_url = urlparse(image_url)
                         
-                        # Extrahiere den Dateinamen ohne .jpg
-                        filename = os.path.basename(parsed_url.path).replace('.jpg', '') or f'image_{file_index}'
-                        file_path = os.path.join(download_dir, f"{filename}.jpg")
+                        # Extrahiere den Künstlernamen vor dem Unterstrich
+                        parsed_url = urlparse(image_url)
+                        artist_name = image_url.split('a~')[1].split('_')[0]
+                        artist_dir = os.path.join(os.getcwd(), 'downloads', artist_name)
+
+                        if not os.path.exists(artist_dir):
+                            os.makedirs(artist_dir)
+                            print(f"📁 Created directory: {artist_dir}")
+
+                        # Extrahiere den Dateinamen und die Endung
+                        filename = os.path.basename(parsed_url.path)  # Name inklusive Endung
+                        file_path = os.path.join(artist_dir, filename)
 
                         await download_image(session, image_url, file_path)
                         print(f"🖼️ Saved image to {file_path}")
-
+                        
                         await delay(250)
 
     except Exception as e:

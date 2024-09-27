@@ -4,7 +4,7 @@ const path = require('path');
 async function main() {
     const url = 'https://storage.googleapis.com/panels-api/data/20240916/media-1a-i-p~s';
     const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
-    
+
     try {
         const response = await fetch(url);
         if (!response.ok) {
@@ -15,11 +15,6 @@ async function main() {
         if (!data) {
             throw new Error('⛔ JSON does not have a "data" property at its root.');
         }
-        const downloadDir = path.join(__dirname, 'downloads');
-        if (!fs.existsSync(downloadDir)) {
-            fs.mkdirSync(downloadDir);
-            console.info(`📁 Created directory: ${downloadDir}`);
-        }
 
         for (const key in data) {
             const subproperty = data[key];
@@ -27,10 +22,20 @@ async function main() {
                 const imageUrl = subproperty.dhd;
                 console.info(`🔍 Found image URL!`);
 
-                // Extrahiere den Dateinamen aus der URL
+                // Extrahiere den Künstlernamen vor dem Unterstrich
+                const artistNameMatch = imageUrl.match(/a~([^_/]+)/);
+                const artistName = artistNameMatch ? artistNameMatch[1] : 'unknown_artist';
+                const artistDir = path.join(__dirname, 'downloads', artistName);
+
+                if (!fs.existsSync(artistDir)) {
+                    fs.mkdirSync(artistDir, { recursive: true });
+                    console.info(`📁 Created directory: ${artistDir}`);
+                }
+
+                // Extrahiere den Dateinamen und die Endung
                 const urlPath = new URL(imageUrl).pathname;
-                const fileName = path.basename(urlPath, '.jpg'); // Name ohne '.jpg'
-                const filePath = path.join(downloadDir, `${fileName}.jpg`);
+                const fileName = path.basename(urlPath); // Name inklusive Endung (z.B. .jpg oder .png)
+                const filePath = path.join(artistDir, fileName);
 
                 await downloadImage(imageUrl, filePath);
                 console.info(`🖼️ Saved image to ${filePath}`);
