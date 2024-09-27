@@ -55,11 +55,6 @@ func downloadImages(x string, rawURL string, downloadsPath string, wg *sync.Wait
 	channel <- fmt.Sprintf("️🖼️ Saved image to %s", imageFileName)
 }
 
-type IOResponse struct {
-	io  io.ReadCloser
-	url string
-}
-
 func main() {
 
 	resp, err := http.Get(DATA_URL)
