@@ -22,24 +22,26 @@ async function main() {
                 const imageUrl = subproperty.dhd;
                 console.info(`🔍 Found image URL!`);
 
-                // Extrahiere den Künstlernamen vor dem Unterstrich
+                // Extract the artist name before the underscore
                 const artistNameMatch = imageUrl.match(/a~([^_/]+)/);
                 const artistName = artistNameMatch ? artistNameMatch[1] : 'unknown_artist';
                 const artistDir = path.join(__dirname, 'downloads', artistName);
 
+                // Create artist directory if it doesn't exist
                 if (!fs.existsSync(artistDir)) {
                     fs.mkdirSync(artistDir, { recursive: true });
                     console.info(`📁 Created directory: ${artistDir}`);
                 }
 
-                // Extrahiere den Dateinamen und die Endung
+                // Extract the filename and extension
                 const urlPath = new URL(imageUrl).pathname;
-                const fileName = path.basename(urlPath); // Name inklusive Endung (z.B. .jpg oder .png)
+                const fileName = path.basename(urlPath); // Filename including extension (e.g. .jpg or .png)
                 const filePath = path.join(artistDir, fileName);
 
+                // Download the image and save it to the specified path
                 await downloadImage(imageUrl, filePath);
                 console.info(`🖼️ Saved image to ${filePath}`);
-                await delay(250); // Wartezeit zwischen Downloads
+                await delay(250); // Delay between downloads
             }
         }
     } catch (error) {
@@ -47,6 +49,7 @@ async function main() {
     }
 }
 
+// Function to download the image from the provided URL
 async function downloadImage(url, filePath) {
     const response = await fetch(url);
     if (!response.ok) {
@@ -57,6 +60,7 @@ async function downloadImage(url, filePath) {
     await fs.promises.writeFile(filePath, buffer);
 }
 
+// ASCII art function (optional)
 function asciiArt() {
     console.info(`
  /$$      /$$ /$$   /$$ /$$$$$$$   /$$$$$$  /$$$$$$$
@@ -70,6 +74,7 @@ function asciiArt() {
     console.info(`🤑 Starting downloads from your favorite sellout grifter's wallpaper app...`);
 }
 
+// Start program with ASCII art and delay
 (() => {
     asciiArt();
     setTimeout(main, 5000);
