@@ -1,28 +1,30 @@
 import argparse
+import asyncio
+import json
 import multiprocessing as mp
 import os
 import re
+import time
 import zipfile
 from collections import defaultdict
-from concurrent.futures import ThreadPoolExecutor
 from urllib.parse import unquote
 
+import aiohttp
 import imagehash
-import requests
 from PIL import Image
 
 
-# python mkbsd.py [--zip] [--zip-name CUSTOM_NAME] [--remove-duplicates]
-
-
-def fetch_json_data(url):
-    response = requests.get(url)
-    if response.status_code == 200:
-        return response.json()
-    else:
-        raise Exception(
-            f"Failed to fetch JSON data. Status code: {response.status_code}"
-        )
+async def fetch_json_data(url):
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url) as response:
+            if response.status == 200:
+                text = await response.text()
+                try:
+                    return json.loads(text)
+                except json.JSONDecodeError:
+                    raise Exception(f"Failed to parse JSON data from {url}")
+            else:
+                raise Exception(f"Failed to fetch data. Status code: {response.status}")
 
 
 def extract_urls(element):
@@ -39,19 +41,27 @@ def extract_urls(element):
     return urls
 
 
-def download_file(url):
+async def download_file(session, url):
     file_name = os.path.basename(unquote(url.split("?")[0]))
     file_name = clean_filename(file_name)
     file_path = os.path.join("downloads", file_name)
     if not os.path.exists(file_path):
-        print(f"Downloading {url}")
-        response = requests.get(url, stream=True)
-        with open(file_path, "wb") as f:
-            for chunk in response.iter_content(chunk_size=8192):
-                f.write(chunk)
+        try:
+            async with session.get(url) as response:
+                if response.status == 200:
+                    with open(file_path, "wb") as f:
+                        while True:
+                            chunk = await response.content.read(8192)
+                            if not chunk:
+                                break
+                            f.write(chunk)
+                    return f"Downloaded: {file_name}"
+                else:
+                    return f"Failed to download {file_name}: HTTP {response.status}"
+        except Exception as e:
+            return f"Error downloading {file_name}: {str(e)}"
     else:
-        print(f"Skipping {url}")
-    return file_path
+        return f"Skipped (already exists): {file_name}"
 
 
 def clean_filename(filename):
@@ -120,7 +130,7 @@ def remove_duplicates(duplicates):
             print(f"Error removing duplicate: {e}")
 
 
-def main():
+async def main():
     parser = argparse.ArgumentParser(
         description="Download images from JSON data and remove duplicates."
     )
@@ -141,7 +151,7 @@ def main():
 
     json_url = "https://storage.googleapis.com/panels-cdn/data/20240730/all.json"
     try:
-        json_data = fetch_json_data(json_url)
+        json_data = await fetch_json_data(json_url)
     except Exception as e:
         print(f"Error: {e}")
         return
@@ -152,8 +162,16 @@ def main():
     if not os.path.exists("downloads"):
         os.makedirs("downloads")
 
-    with ThreadPoolExecutor(max_workers=10) as executor:
-        executor.map(download_file, urls)
+    start_time = time.time()
+    async with aiohttp.ClientSession() as session:
+        tasks = [download_file(session, url) for url in urls]
+        for batch in [tasks[i : i + 50] for i in range(0, len(tasks), 50)]:
+            results = await asyncio.gather(*batch)
+            for result in results:
+                print(result)
+
+    end_time = time.time()
+    print(f"Download completed in {end_time - start_time:.2f} seconds")
 
     if args.remove_duplicates:
         print("Searching for duplicate images...")
@@ -172,4 +190,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())
