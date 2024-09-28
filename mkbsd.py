@@ -5,13 +5,18 @@ import time
 import aiohttp
 import asyncio
 from urllib.parse import urlparse
+
 url = 'https://storage.googleapis.com/panels-api/data/20240916/media-1a-i-p~s'
 
 async def delay(ms):
     await asyncio.sleep(ms / 1000)
 
-async def download_image(session, image_url, file_path):
+async def download_image(session, image_url, file_path, replace_existing):
     try:
+        if not replace_existing and os.path.exists(file_path):
+            print(f"⚠️ File {file_path} already exists. Skipping download.")
+            return
+
         async with session.get(image_url) as response:
             if response.status != 200:
                 raise Exception(f"Failed to download image: {response.status}")
@@ -21,7 +26,7 @@ async def download_image(session, image_url, file_path):
     except Exception as e:
         print(f"Error downloading image: {str(e)}")
 
-async def main():
+async def main(replace_existing):
     try:
         async with aiohttp.ClientSession() as session:
             async with session.get(url) as response:
@@ -48,7 +53,7 @@ async def main():
                         filename = f"{file_index}{ext}"
                         file_path = os.path.join(download_dir, filename)
 
-                        await download_image(session, image_url, file_path)
+                        await download_image(session, image_url, file_path, replace_existing)
                         print(f"🖼️ Saved image to {file_path}")
 
                         file_index += 1
@@ -70,7 +75,24 @@ def ascii_art():
     print("")
     print("🤑 Starting downloads from your favorite sellout grifter's wallpaper app...")
 
+def prompt_user():
+    while True:
+        print("Files already exist in the 'downloads' directory.")
+        print("1. Skip existing files and download new ones.")
+        print("2. Replace existing files and download all.")
+        choice = input("Enter your choice (1 or 2): ")
+        if choice in ['1', '2']:
+            return choice == '2'
+        print("Invalid choice. Please enter 1 or 2.")
+
 if __name__ == "__main__":
     ascii_art()
     time.sleep(5)
-    asyncio.run(main())
+
+    download_dir = os.path.join(os.getcwd(), 'downloads')
+    if os.path.exists(download_dir) and os.listdir(download_dir):
+        replace_existing = prompt_user()
+    else:
+        replace_existing = True
+
+    asyncio.run(main(replace_existing))
