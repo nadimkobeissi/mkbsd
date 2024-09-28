@@ -29,6 +29,9 @@ async def main():
                     raise Exception(f"⛔ Failed to fetch JSON file: {response.status}")
                 json_data = await response.json()
                 data = json_data.get('data')
+
+                count = len(data) if data else 0
+                print(f"Found {count} images..")
                 
                 if not data:
                     raise Exception('⛔ JSON does not have a "data" property at its root.')
