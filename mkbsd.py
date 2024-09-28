@@ -1,3 +1,5 @@
+# Licensed under the WTFPL License
+
 import os
 import time
 import aiohttp
