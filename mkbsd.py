@@ -1,3 +1,5 @@
+# Created by Nadim Kobeissi
+# Modified by @ispeakcode
 # Licensed under the WTFPL License
 
 import os
