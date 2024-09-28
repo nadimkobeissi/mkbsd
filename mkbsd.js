@@ -19,6 +19,10 @@ async function main() {
 		if (!data) {
 			throw new Error('⛔ JSON does not have a "data" property at its root.');
 		}
+
+		const count = data ? Object.keys(data).length : 0;
+		console.info(`Found ${count} images..`);
+		
 		const downloadDir = path.join(__dirname, 'downloads');
 		if (!fs.existsSync(downloadDir)) {
 			fs.mkdirSync(downloadDir);
