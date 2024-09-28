@@ -26,7 +26,7 @@ async function main() {
 			throw new Error('⛔ JSON does not have a "data" property at its root.');
 		}
 
-		const downloadDir = path.join(__dirname, 'downloads-1');
+		const downloadDir = path.join(__dirname, 'downloads');
 		if (!fs.existsSync(downloadDir)) {
 			fs.mkdirSync(downloadDir);
 			console.info(`📁 Created directory: ${downloadDir}`);
