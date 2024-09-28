@@ -23,7 +23,7 @@ async def download_image(session, image_url, file_path):
 
 async def main():
     try:
-        async with aiohttp.ClientSession() as session:
+        async with aiohttp.ClientSession(connector=aiohttp.TCPConnector(verify_ssl=False)) as session:
             async with session.get(url) as response:
                 if response.status != 200:
                     raise Exception(f"⛔ Failed to fetch JSON file: {response.status}")
