@@ -1,3 +1,7 @@
+// Created by Nadim Kobeissi
+// Modified by @ispeakcode
+// Licensed under the WTFPL License
+
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
