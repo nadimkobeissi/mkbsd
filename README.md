@@ -13,7 +13,7 @@ _Because selling out is bad_
 
 ## How to use
 
-MKBSD comes in two variants! Node.js and Python.
+MKBSD comes in two variants! Node.js and Python and Ruby.
 
 ### Running in Node.js
 
@@ -30,6 +30,16 @@ MKBSD comes in two variants! Node.js and Python.
 4. Wait a little.
 5. All wallpapers are now in a newly created `downloads` subfolder.
 
+### Running in Ruby
+
+1. Ensure you have Ruby installed (version 2.7+ recommended).
+2. No additional gems are required as the script uses only standard library.
+3. Make the script executable: `chmod +x dwl.rb`
+4. Run the script: `./dwl.rb` or `ruby dwl.rb`
+5. Wait a little.
+6. All wallpapers will be downloaded to a newly created `downloads` subfolder in the current directory.
+
+Note: Unlike the Python version which uses `aiohttp` for asynchronous requests, this Ruby script uses synchronous requests with the standard `net/http` library. As a result, it might be slower for downloading multiple images.
 ## FAQ
 
 ### Q: What's the story behind this?
