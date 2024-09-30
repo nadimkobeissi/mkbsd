@@ -1,12 +1,12 @@
 ```
- /$$      /$$ /$$   /$$ /$$$$$$$   /$$$$$$  /$$$$$$$ 
+ /$$      /$$ /$$   /$$ /$$$$$$$   /$$$$$$  /$$$$$$$
 | $$$    /$$$| $$  /$$/| $$__  $$ /$$__  $$| $$__  $$
 | $$$$  /$$$$| $$ /$$/ | $$  \ $$| $$  \__/| $$  \ $$
 | $$ $$/$$ $$| $$$$$/  | $$$$$$$ |  $$$$$$ | $$  | $$
 | $$  $$$| $$| $$  $$  | $$__  $$ \____  $$| $$  | $$
 | $$\  $ | $$| $$\  $$ | $$  \ $$ /$$  \ $$| $$  | $$
 | $$ \/  | $$| $$ \  $$| $$$$$$$/|  $$$$$$/| $$$$$$$/
-|__/     |__/|__/  \__/|_______/  \______/ |_______/ 
+|__/     |__/|__/  \__/|_______/  \______/ |_______/
 ```
 
 _Because selling out is bad_
@@ -29,6 +29,12 @@ MKBSD comes in two variants! Node.js and Python.
 3. Run `python mkbsd.py`
 4. Wait a little.
 5. All wallpapers are now in a newly created `downloads` subfolder.
+
+### Running using docker
+
+1. Ensure you have docker installed
+2. Build the image with `docker build -t mkbsd .`
+3. Run the image, mounting a directory where you want the image to be stored as a volume at `/app/downloads`. For example, `docker run -v $PWD:/app/downloads mkbsd`
 
 ## FAQ
 
