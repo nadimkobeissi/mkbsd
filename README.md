@@ -10,10 +10,11 @@
 ```
 
 _Because selling out is bad_
+Based on nadimkobeissi's [MKBSD](https://github.com/nadimkobeissi/mkbsd)
 
 ## How to use
 
-MKBSD comes in two variants! Node.js and Python.
+MKBSD comes in three variants! Node.js, Python and C#.
 
 ### Running in Node.js
 
