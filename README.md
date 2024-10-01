@@ -11,9 +11,11 @@
 
 _Because selling out is bad_
 
+Based on nadimkobeissi's [MKBSD](https://github.com/nadimkobeissi/mkbsd)
+
 ## How to use
 
-MKBSD comes in two variants! Node.js and Python.
+MKBSD comes in three variants! Node.js, Python and C#.
 
 ### Running in Node.js
 
@@ -29,6 +31,15 @@ MKBSD comes in two variants! Node.js and Python.
 3. Run `python mkbsd.py`
 4. Wait a little.
 5. All wallpapers are now in a newly created `downloads` subfolder.
+
+### Running in C#
+
+1. Ensure you have dotnet installed.
+2. Navigate to `mkbsdSharp` folder.
+3. Run `dotnet run`
+4. Wait a little.
+4. All wallpapers are now in a newly created `downloads` subfolder.
+
 
 ## FAQ
 
