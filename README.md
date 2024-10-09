@@ -23,7 +23,7 @@ MKBSD comes in two variants! Node.js and Python.
 4. Wait a little.
 5. All wallpapers are now in a newly created `downloads` subfolder.
 
-### Changes Made in `mkbsd.js`
+### Changes Made in `mkbsd.js and mkbsd.py`
 
 - **Local JSON Source**: The script was updated to read from a local `images.json` file instead of fetching data from a remote URL. This allows you to have full control over the data source.
 - **File System Operations**: The script now uses Node.js's `fs` module to read and parse the JSON file directly.
@@ -32,8 +32,8 @@ MKBSD comes in two variants! Node.js and Python.
 ### Running in Python
 
 1. Ensure you have Python installed.
-2. Ensure you have the `aiohttp` Python package installed (`pip install aiohttp`).
-3. Run `python mkbsd.py`
+2. Save the `images.json` file in the same directory as `mkbsd.py`.
+3. Run `python mkbsd.py`.
 4. Wait a little.
 5. All wallpapers are now in a newly created `downloads` subfolder.
 
