@@ -30,6 +30,20 @@ MKBSD comes in two variants! Node.js and Python.
 4. Wait a little.
 5. All wallpapers are now in a newly created `downloads` subfolder.
 
+### Running in Docker
+
+1. Ensure you have Docker installed.
+2. Build the Docker image:
+   ```sh
+   docker build -t mkbsd .
+   ```
+3. Run the Docker container:
+   ```sh
+   docker run --rm -v $(pwd)/downloads:/app/downloads mkbsd
+   ```
+4. Wait a little.
+5. All wallpapers are now in a newly created `downloads` subfolder.
+
 ## FAQ
 
 ### Q: What's the story behind this?
